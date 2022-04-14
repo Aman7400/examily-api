@@ -1,5 +1,6 @@
 import 'dotenv/config';
 
+import { connectDB } from './utils/db';
 import cors from 'cors';
 import express from 'express';
 import morgan from 'morgan';
@@ -7,6 +8,9 @@ import morgan from 'morgan';
 const port = process.env.PORT;
 
 const app = express();
+
+// * Connect Database
+connectDB();
 
 // * Middlewares
 app.use(cors());
