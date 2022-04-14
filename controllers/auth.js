@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const { getJWTToken } = require('../utils/jwt');
 const { getHashedPassword, isValidPassword } = require('../utils/user');
 
 const postRegisterNewUser = async (req, res) => {
@@ -36,8 +37,10 @@ const postLoginUser = async (req, res, next) => {
       res.status(401);
       throw new Error('Invalid password');
     }
-    //   TODO - genrate JWT
-    res.json({ message: 'Logged in successfully' });
+    res.json({
+      message: 'Logged in successfully',
+      token: await getJWTToken(user._id.toString()),
+    });
   } catch (error) {
     next(error);
   }
