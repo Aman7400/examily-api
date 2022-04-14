@@ -46,4 +46,12 @@ const postLoginUser = async (req, res, next) => {
   }
 };
 
-module.exports = { postRegisterNewUser, postLoginUser };
+const getUserProfile = async (req, res, next) => {
+  try {
+    res.json({ message: 'User Profile', user: req.user });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { postRegisterNewUser, postLoginUser, getUserProfile };
