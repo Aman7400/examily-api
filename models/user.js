@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema(
       type: 'string',
     },
     email: {
-      type: 'array',
+      type: 'string',
       required: true,
     },
     password: {
@@ -38,4 +38,4 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model('Exams', userSchema);
+module.exports = mongoose.model('Users', userSchema);

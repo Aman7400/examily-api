@@ -19,6 +19,10 @@ app.use(express.urlencoded({ extended: false }));
 
 // * Routes
 app.use(require('./routes'));
+// * Error Handler
+app.use((err, req, res, next) => {
+  res.json({ message: err.message });
+});
 
 app.listen(port, () => {
   console.log(`Server running at ${port}`);
