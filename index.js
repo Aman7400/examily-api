@@ -18,9 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // * Routes
-app.get('/', (req, res) => {
-  res.send('Welcome to Examily');
-});
+app.use(require('./routes'));
 
 app.listen(port, () => {
   console.log(`Server running at ${port}`);
