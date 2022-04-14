@@ -1,7 +1,7 @@
-import mongoose, { Schema, model } from 'mongoose';
+const mongoose = require('mongoose');
 
 // * Questions Schema
-const questionSchema = new Schema({
+const questionSchema = new mongoose.Schema({
   title: {
     type: 'string',
     required: true,
@@ -17,7 +17,7 @@ const questionSchema = new Schema({
 });
 
 // * Exam Schema
-const examSchema = new Schema(
+const examSchema = new mongoose.Schema(
   {
     name: {
       type: 'string',
@@ -51,4 +51,4 @@ const examSchema = new Schema(
   }
 );
 
-export default model('Exams', examSchema);
+export default mongoose.model('Exams', examSchema);

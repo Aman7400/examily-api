@@ -1,9 +1,8 @@
-import 'dotenv/config';
-
-import { connectDB } from './utils/db';
-import cors from 'cors';
-import express from 'express';
-import morgan from 'morgan';
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const morgan = require('morgan');
+const connectDB = require('./utils/db');
 
 const port = process.env.PORT;
 
