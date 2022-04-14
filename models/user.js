@@ -18,6 +18,15 @@ const userSchema = new Schema(
       type: 'string',
       enum: ['examiner', 'examinee'],
       default: 'examinee',
+      required: true,
+    },
+    isDeleted: {
+      type: 'boolean',
+      default: false,
+    },
+    isVerified: {
+      type: 'boolean',
+      default: false,
     },
   },
   {
