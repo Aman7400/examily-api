@@ -14,6 +14,10 @@ const userSchema = new mongoose.Schema(
       type: 'array',
       required: true,
     },
+    password: {
+      type: 'string',
+      required: true,
+    },
     userType: {
       type: 'string',
       enum: ['examiner', 'examinee'],
