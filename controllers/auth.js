@@ -1,12 +1,57 @@
-const User = require('../models/user');
+const { User } = require('../models/user');
+const Joi = require('joi');
+
 const { getJWTToken } = require('../utils/jwt');
 const { getHashedPassword, isValidPassword } = require('../utils/user');
 
-const postRegisterNewUser = async (req, res) => {
+const postRegisterNewUser = async (req, res, next) => {
   try {
     const { firstName, lastName, email, password, userType } = req.body;
 
-    // TODO - Add Validation
+    const user = await User.findOne({ email: email });
+
+    // * Check if user is already exists with given mail
+    if (user) {
+      res.status(400);
+      throw new Error('Email already in use');
+    }
+
+    // * Validations
+    const schema = Joi.object({
+      firstName: Joi.string().required().messages({
+        'any.required': 'First name is required',
+      }),
+      lastName: Joi.string().allow(''),
+      password: Joi.string().required().messages({
+        'any.required': 'Password is required',
+      }),
+      email: Joi.string()
+        .email({
+          minDomainSegments: 2,
+          tlds: { allow: ['com', 'net'] },
+        })
+        .messages({
+          'any.required': 'Email is required',
+          'string.email': 'Email is Invalid',
+        }),
+      userType: Joi.string().required().messages({
+        'any.required': 'User type is required',
+      }),
+    });
+
+    const { error } = schema.validate({
+      firstName,
+      lastName,
+      email,
+      password,
+      userType,
+    });
+
+    if (error) {
+      res.status(400);
+      throw new Error(error.details[0].message);
+    }
+
     const newUser = new User({
       firstName,
       lastName,
@@ -14,11 +59,10 @@ const postRegisterNewUser = async (req, res) => {
       password: await getHashedPassword(password),
       userType,
     });
-
     await newUser.save();
-    res.json({ message: 'Account created successfully' });
+    res.json({ message: 'Account created successfully', user: newUser._id });
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 };
 
