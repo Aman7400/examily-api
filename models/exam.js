@@ -25,7 +25,7 @@ const examSchema = new mongoose.Schema(
     },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'Users',
       required: true,
     },
     questions: {
@@ -53,4 +53,14 @@ const examSchema = new mongoose.Schema(
 
 const Exam = mongoose.model('Exams', examSchema);
 
-module.exports = { Exam, examSchema };
+// * Generate Answer Key
+// examSchema.pre('save', function (next) {
+//   console.log(
+//     'ak',
+//     this.questions.map((question) => question.correctAnswer)
+//   );
+//   this.answerKey = this.questions.map((question) => question.correctAnswer);
+//   next();
+// });
+
+module.exports = { Exam };
