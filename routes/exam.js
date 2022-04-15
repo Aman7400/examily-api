@@ -1,4 +1,8 @@
-const { postCreateNewExam, getAllExams } = require('../controllers/exams');
+const {
+  postCreateNewExam,
+  getAllExams,
+  postTakeExam,
+} = require('../controllers/exams');
 
 const router = require('express').Router();
 
@@ -9,5 +13,7 @@ router.get('/', (req, res) => {
 router.post('/create', postCreateNewExam);
 
 router.get('/all', getAllExams);
+
+router.post('/test', postTakeExam);
 
 module.exports = router;

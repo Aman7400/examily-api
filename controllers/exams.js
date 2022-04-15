@@ -28,6 +28,30 @@ const postCreateNewExam = async (req, res, next) => {
   }
 };
 
+const postTakeExam = async (req, res, next) => {
+  try {
+    //   * if user is examiner, return
+    if (req.user.userType === 'Examiner') {
+      res.status(401);
+      throw new Error('Unauthorized');
+    }
+    const { attemptedExamDetails } = req.body;
+    const { answers, examId } = attemptedExamDetails;
+    let marks = 0;
+    const { answerKey } = await Exam.findById(examId).select('answerKey');
+    console.log({ answers }, { answerKey });
+    for (let i = 0; i < answers.length; i++) {
+      if (answers[i] == answerKey[i]) {
+        marks += 1;
+      }
+    }
+    //   *  Add Exam to User Profile, Add User to ExamStats.TotalStudentAttmepted
+    res.json({ messages: 'Result', marks });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const getAllExams = async (req, res, next) => {
   try {
     const allExams = await Exam.find({ createdBy: req.user._id }).populate(
@@ -41,4 +65,4 @@ const getAllExams = async (req, res, next) => {
   }
 };
 
-module.exports = { postCreateNewExam, getAllExams };
+module.exports = { postCreateNewExam, getAllExams, postTakeExam };
