@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/user');
+const { User } = require('../models/user');
 const fs = require('fs');
 const path = require('path');
 const privateKey = fs.readFileSync(path.join(__dirname, '../private.pem'));
@@ -30,7 +30,7 @@ const verifyUser = async (req, res, next) => {
   if (!token) {
     try {
       res.status(401);
-      throw new Error('Unauthorized');
+      throw new Error('Unauthorized Access denied. Please Login');
     } catch (error) {
       next(error);
     }
