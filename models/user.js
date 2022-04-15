@@ -20,9 +20,8 @@ const userSchema = new mongoose.Schema(
     },
     userType: {
       type: 'string',
-      enum: ['examiner', 'examinee'],
-      default: 'examinee',
-      required: true,
+      enum: ['Examiner', 'Student'],
+      default: 'Examiner',
     },
     isDeleted: {
       type: 'boolean',
@@ -38,4 +37,7 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model('Users', userSchema);
+// * User Model
+const User = mongoose.model('Users', userSchema);
+
+module.exports = { User };

@@ -51,4 +51,6 @@ const examSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model('Exams', examSchema);
+const Exam = mongoose.model('Exams', examSchema);
+
+module.exports = { Exam, examSchema };
