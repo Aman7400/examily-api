@@ -91,31 +91,61 @@ const postTakeExam = async (req, res, next) => {
 
     const { attemptedExamDetails } = req.body;
     const { answers, examId } = attemptedExamDetails;
-    let marks = 0;
     const exam = await Exam.findById(examId);
 
+    // * Validations
+    const schema = Joi.object({
+      answers: Joi.array().required().length(exam.questions.length).messages({
+        'any.required': 'Answers are required',
+        'array.length': 'Invalid Answers',
+      }),
+    });
+
+    const { error } = schema.validate({ answers });
+
+    if (error) {
+      res.status(400);
+      throw new Error(error.details[0].message);
+    }
+
     // * Calculate Marks
+    let marks = 0;
+    let passStatus;
+
     for (let i = 0; i < answers.length; i++) {
       if (answers[i] == exam.answerKey[i]) {
         marks += 1;
       }
     }
 
-    // * Add Student to attemptedBy list
+    if (marks >= Number(exam.questions.length / 3)) {
+      passStatus = 'Pass';
+    } else {
+      passStatus = 'Fail';
+    }
+    // * Add Student to Exam attemptedBy list
     exam.attemptedBy.push(student._id);
     await exam.save();
 
-    // * Add Result to student Account
+    // * Add Result to Student profile
     student.results.push({
       attemptedOn: new Date(),
       score: marks,
       examDetails: examId,
+      passStatus,
       scoredOutOf: exam.questions.length,
     });
-
     await student.save();
 
-    res.json({ messages: 'Result', result: student.results });
+    res.json({
+      messages: 'Response Saved',
+      result: {
+        score: marks,
+        examDetails: examId,
+        passStatus,
+        scoredOutOf: exam.questions.length,
+      },
+    });
   } catch (error) {
     next(error);
   }

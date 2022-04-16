@@ -14,6 +14,9 @@ const resultSchema = new mongoose.Schema({
   scoredOutOf: {
     type: 'String',
   },
+  passStatus: {
+    type: 'String',
+  },
 });
 
 // * User Schema
