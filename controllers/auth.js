@@ -92,7 +92,15 @@ const postLoginUser = async (req, res, next) => {
 
 const getUserProfile = async (req, res, next) => {
   try {
-    res.json({ message: 'User Profile', user: req.user });
+    // * if userType is Student, only then send results[] with All exam results
+    let user;
+    if (req.user.userType === 'Examiner') {
+      user = await User.findById(req.user._id).select('-results');
+    } else {
+      user = req.user;
+    }
+
+    res.json({ message: 'User Profile', user });
   } catch (error) {
     next(error);
   }

@@ -103,10 +103,19 @@ const postTakeExam = async (req, res, next) => {
 
     // * Add Student to attemptedBy list
     exam.attemptedBy.push(student._id);
-
     await exam.save();
 
-    res.json({ messages: 'Result', marks });
+    // * Add Result to student Account
+    student.results.push({
+      attemptedOn: new Date(),
+      score: marks,
+      examDetails: examId,
+      scoredOutOf: exam.questions.length,
+    });
+
+    await student.save();
+
+    res.json({ messages: 'Result', result: student.results });
   } catch (error) {
     next(error);
   }

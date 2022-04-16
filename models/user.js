@@ -1,5 +1,21 @@
 const mongoose = require('mongoose');
 
+const resultSchema = new mongoose.Schema({
+  examDetails: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Exams',
+  },
+  attemptedOn: {
+    type: 'String',
+  },
+  score: {
+    type: 'String',
+  },
+  scoredOutOf: {
+    type: 'String',
+  },
+});
+
 // * User Schema
 const userSchema = new mongoose.Schema(
   {
@@ -30,6 +46,10 @@ const userSchema = new mongoose.Schema(
     isVerified: {
       type: 'boolean',
       default: false,
+    },
+
+    results: {
+      type: [resultSchema],
     },
   },
   {
