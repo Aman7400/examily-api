@@ -45,6 +45,10 @@ const examSchema = new mongoose.Schema(
     answerKey: {
       type: 'array',
     },
+    attemptedBy: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: 'Users',
+    },
   },
   {
     timestamps: true,

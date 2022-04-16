@@ -82,23 +82,45 @@ const postCreateNewExam = async (req, res, next) => {
 
 const postTakeExam = async (req, res, next) => {
   try {
+    const student = req.user;
     //   * if user is examiner, return
-    if (req.user.userType === 'Examiner') {
+    if (student.userType === 'Examiner') {
       res.status(401);
       throw new Error('Unauthorized');
     }
+
     const { attemptedExamDetails } = req.body;
     const { answers, examId } = attemptedExamDetails;
     let marks = 0;
-    const { answerKey } = await Exam.findById(examId).select('answerKey');
-    console.log({ answers }, { answerKey });
+    const exam = await Exam.findById(examId);
+
+    // * Calculate Marks
     for (let i = 0; i < answers.length; i++) {
-      if (answers[i] == answerKey[i]) {
+      if (answers[i] == exam.answerKey[i]) {
         marks += 1;
       }
     }
-    //   *  Add Exam to User Profile, Add User to ExamStats.TotalStudentAttmepted
+
+    // * Add Student to attemptedBy list
+    exam.attemptedBy.push(student._id);
+
+    await exam.save();
+
     res.json({ messages: 'Result', marks });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getAExam = async (req, res, next) => {
+  try {
+    const { examId } = req.params;
+
+    const examDetails = await Exam.findById(examId)
+      .populate('createdBy', ['_id', 'firstName', 'lastName', 'email'])
+      .populate('attemptedBy', ['_id', 'firstName', 'lastName', 'email']);
+
+    res.json({ message: 'Exam details', details: examDetails });
   } catch (error) {
     next(error);
   }
@@ -117,4 +139,4 @@ const getAllExams = async (req, res, next) => {
   }
 };
 
-module.exports = { postCreateNewExam, getAllExams, postTakeExam };
+module.exports = { postCreateNewExam, getAllExams, postTakeExam, getAExam };
