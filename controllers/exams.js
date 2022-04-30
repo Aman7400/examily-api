@@ -18,7 +18,7 @@ const postCreateNewExam = async (req, res, next) => {
       name: Joi.string().required().messages({
         'any.required': 'Exam Name is required',
       }),
-      description: Joi.string(),
+      description: Joi.string().allow(''),
       endsOn: Joi.string().required().messages({
         'any.required': 'Exam Expiry Date is required',
       }),
@@ -127,6 +127,7 @@ const postTakeExam = async (req, res, next) => {
       passStatus = 'Fail';
     }
     // * Add Student to Exam attemptedBy list
+    // TODO - add score in attemptedBy, for scoreboard
     exam.attemptedBy.push(student._id);
     await exam.save();
 
