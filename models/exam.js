@@ -23,6 +23,7 @@ const examSchema = new mongoose.Schema(
       type: 'string',
       required: true,
     },
+    description: { type: 'string' },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Users',
@@ -33,14 +34,18 @@ const examSchema = new mongoose.Schema(
       type: [questionSchema],
     },
     status: {
-      required: true,
       type: 'string',
     },
     passPercent: {
       type: 'number',
     },
-    expireIn: {
-      type: 'number',
+    startsOn: {
+      type: 'string',
+      required: true,
+    },
+    endsOn: {
+      type: 'string',
+      required: true,
     },
     answerKey: {
       type: 'array',

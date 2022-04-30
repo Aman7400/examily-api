@@ -84,6 +84,7 @@ const postLoginUser = async (req, res, next) => {
     res.json({
       message: 'Logged in successfully',
       token: await getJWTToken(user._id.toString()),
+      userType: user.userType,
     });
   } catch (error) {
     next(error);

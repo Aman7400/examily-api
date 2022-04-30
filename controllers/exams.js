@@ -2,6 +2,8 @@ const { User } = require('../models/user');
 const { Exam } = require('../models/exam');
 const Joi = require('joi');
 
+// TODO - Data Sanitization
+
 const postCreateNewExam = async (req, res, next) => {
   try {
     //   * if user is student, return
@@ -16,11 +18,12 @@ const postCreateNewExam = async (req, res, next) => {
       name: Joi.string().required().messages({
         'any.required': 'Exam Name is required',
       }),
-      expireIn: Joi.number().required().messages({
-        'any.required': 'Exam Expiry is required',
+      description: Joi.string(),
+      endsOn: Joi.string().required().messages({
+        'any.required': 'Exam Expiry Date is required',
       }),
-      status: Joi.string().required().messages({
-        'any.required': 'Exam Status is required',
+      startsOn: Joi.string().required().messages({
+        'any.required': 'Exam Start Date is required',
       }),
       questions: Joi.array()
         .required()

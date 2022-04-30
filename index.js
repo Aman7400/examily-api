@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // * Routes
-app.use(require('./routes'));
+app.use('/api', require('./routes'));
 // * Error Handler
 // TODO - Refractor Logic
 app.use((err, req, res, next) => {
