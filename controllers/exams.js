@@ -168,7 +168,7 @@ const getAExam = async (req, res, next) => {
     next(error);
   }
 };
-
+// * Get All Exams created by a Examiner
 const getAllExams = async (req, res, next) => {
   try {
     const allExams = await Exam.find({ createdBy: req.user._id }).populate(
@@ -182,4 +182,26 @@ const getAllExams = async (req, res, next) => {
   }
 };
 
-module.exports = { postCreateNewExam, getAllExams, postTakeExam, getAExam };
+// * Get All Available Exams for a Student
+// TODO - return only unattempted exams
+const getAllAvailableExams = async (req, res, next) => {
+  try {
+    const allExams = await Exam.find().populate('createdBy', [
+      '_id',
+      'firstName',
+      'lastName',
+      'email',
+    ]);
+    res.json({ message: 'All Available Exams', exams: allExams });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {
+  postCreateNewExam,
+  getAllExams,
+  postTakeExam,
+  getAExam,
+  getAllAvailableExams,
+};
